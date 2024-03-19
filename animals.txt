@@ -1,0 +1,67 @@
+import 'dart:io';
+
+abstract class Pet {
+  void play();
+}
+
+class Animal {
+  String name;
+
+  Animal(this.name);
+
+  void makeSound() {
+    print('The animal makes a sound');
+  }
+}
+
+class Dog extends Animal implements Pet {
+  Dog(String name) : super(name);
+
+  @override
+  void makeSound() {
+    print('$name barks');
+  }
+
+  @override
+  void play() {
+    print('$name plays fetch');
+  }
+}
+
+class Cat extends Animal implements Pet {
+  Cat(String name) : super(name);
+
+  @override
+  void makeSound() {
+    print('$name meows');
+  }
+
+  @override
+  void play() {
+    print('$name plays with a toy');
+  }
+}
+
+void main() {
+  List<Animal> animals = ['Poodle, Dog','German,Dog','Persian,Cat','Scottish,Cat'];
+  File file = File('animals.txt');
+  List<String> lines = file.readAsLinesSync();
+
+  for (String line in lines) {
+    List<String> data = line.split(',');
+    String type = data[0].trim();
+    String name = data[1].trim();
+
+    if (type == 'Dog') {
+      animals.add(Dog(name));
+    } else if (type == 'Cat') {
+      animals.add(Cat(name));
+    }
+  }
+  for (Animal animal in animals) {
+    animal.makeSound();
+    if (animal is Pet) {
+      animal.play();
+    }
+  }
+}
